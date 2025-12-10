@@ -94,6 +94,7 @@ class SlurpResult:
         elif self.region_box.kind == "toplevel":
             return f"Window: {self.region_box.label}\n"
         else:
+            #return f"Region: {self.region_box.format(with_label=False)}"
             raise ValueError("non-monitor/window regions are not supported by xdg-desktop-portal-wlr yet")
 
 def run_slurp(args: Args, boxes: list[Box]) -> SlurpResult:
