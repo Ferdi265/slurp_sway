@@ -3,6 +3,7 @@ from argparse import ArgumentParser, Namespace as Args
 from dataclasses import dataclass
 from subprocess import Popen, PIPE
 from copy import copy
+import sys
 from .box import Box
 
 ARG_OPTIONS: list[str] = ["b", "c", "s", "B", "F", "w", "a"]
@@ -104,5 +105,8 @@ def run_slurp(args: Args, boxes: list[Box]) -> SlurpResult:
         p.stdin.close()
         p.wait()
         result_str = p.stdout.read().decode()
+
+        if p.returncode != 0:
+            sys.exit(p.returncode)
 
     return SlurpResult.parse(result_str)
