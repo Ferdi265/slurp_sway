@@ -38,6 +38,16 @@ def format_slurp_cmdline(args: Args) -> list[str]:
 
     return cmd
 
+XDPW_KIND_MAPPING = {
+    "output": "Monitor",
+    "toplevel": "Window",
+    "input": "Region",
+    "default": "Region"
+}
+
+def map_xdpw_kind(kind: str | None) -> str:
+    return XDPW_KIND_MAPPING.get(kind, XDPW_KIND_MAPPING["default"])
+
 @dataclass
 class SlurpResult:
     region_box: Box
@@ -73,7 +83,14 @@ class SlurpResult:
                 case (True, "h"):
                     result += f"{self.region_box.h}"
                 case (True, "l"):
-                    result += f"{self.region_box.label}"
+                    result += self.region_box.label
+                case (True, "k"):
+                    result += self.region_box.kind or ""
+                case (True, "K"):
+                    xdpw_kind = map_xdpw_kind(self.region_box.kind)
+                    if xdpw_kind == "Region":
+                        raise ValueError("non-monitor/window regions are not supported by xdg-desktop-portal-wlr yet")
+                    result += xdpw_kind
                 case (True, "X"):
                     result += f"{self.output_box.x}"
                 case (True, "Y"):
@@ -83,19 +100,13 @@ class SlurpResult:
                 case (True, "H"):
                     result += f"{self.output_box.h}"
                 case (True, "o"):
-                    result += f"{self.output_box.label}"
+                    result += self.output_box.label
             is_fmt_seq = next_is_fmt_seq
 
         return result
 
     def format_xdpw(self) -> str:
-        if self.region_box.kind == "output":
-            return f"Monitor: {self.region_box.label}\n"
-        elif self.region_box.kind == "toplevel":
-            return f"Window: {self.region_box.label}\n"
-        else:
-            #return f"Region: {self.region_box.format(with_label=False)}"
-            raise ValueError("non-monitor/window regions are not supported by xdg-desktop-portal-wlr yet")
+        return self.format("%K: %l\n")
 
 def run_slurp(args: Args, boxes: list[Box]) -> SlurpResult:
     cmd = format_slurp_cmdline(args)
