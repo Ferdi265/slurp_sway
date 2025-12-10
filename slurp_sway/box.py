@@ -47,7 +47,7 @@ def parse_input_boxes() -> list[Box]:
     boxes = []
 
     if not sys.stdin.isatty():
-        for line in sys.stdin.readline():
+        for line in sys.stdin.readlines():
             if line == "":
                 continue
 
