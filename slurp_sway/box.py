@@ -21,10 +21,10 @@ class Box:
 
     @staticmethod
     def parse_with_kind(s: str) -> Box:
-        m = re.match("([0-9]+),([0-9]+) ([0-9]+)x([0-9]+) ([^:]+):(.*)", s)
+        m = re.match("([0-9]+),([0-9]+) ([0-9]+)x([0-9]+)( ([^:]+):(.*))?", s)
         if m is None:
             raise ValueError(f"invalid box format: {s}")
-        return Box(int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4)), m.group(6), kind=m.group(5))
+        return Box(int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4)), m.group(7) or "", kind=(m.group(6) or None))
 
     @staticmethod
     def from_json(node: dict[str, int]) -> Box:
