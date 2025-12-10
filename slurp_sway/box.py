@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import sys
 import re
 
-@dataclass
+@dataclass(order=True)
 class Box:
     x: int
     y: int

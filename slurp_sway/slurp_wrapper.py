@@ -86,11 +86,6 @@ class SlurpResult:
                     result += self.region_box.label
                 case (True, "k"):
                     result += self.region_box.kind or ""
-                case (True, "K"):
-                    xdpw_kind = map_xdpw_kind(self.region_box.kind)
-                    if xdpw_kind == "Region":
-                        raise ValueError("non-monitor/window regions are not supported by xdg-desktop-portal-wlr yet")
-                    result += xdpw_kind
                 case (True, "X"):
                     result += f"{self.output_box.x}"
                 case (True, "Y"):
@@ -101,12 +96,18 @@ class SlurpResult:
                     result += f"{self.output_box.h}"
                 case (True, "o"):
                     result += self.output_box.label
+                case (True, "L"):
+                    result += self.region_box.label or self.format("%x,%y %wx%h")
+                case (True, "K"):
+                    result += map_xdpw_kind(self.region_box.kind)
             is_fmt_seq = next_is_fmt_seq
 
         return result
 
     def format_xdpw(self) -> str:
-        return self.format("%K: %l\n")
+        if map_xdpw_kind(self.region_box.kind) == "Region":
+            raise ValueError("non-monitor/window regions are not supported by xdg-desktop-portal-wlr yet")
+        return self.format("%K: %L\n")
 
 def run_slurp(args: Args, boxes: list[Box]) -> SlurpResult:
     cmd = format_slurp_cmdline(args)
