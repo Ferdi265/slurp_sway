@@ -34,7 +34,7 @@ class Box:
 
     def format(self, with_label: bool = True) -> str:
         label = ""
-        if self.kind is not None:
+        if with_label and self.kind is not None:
             label += self.kind + ":"
         if with_label:
             label += self.label
