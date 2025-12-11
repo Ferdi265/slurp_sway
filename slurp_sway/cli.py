@@ -5,16 +5,20 @@ from slurp_sway import sway_tree
 from slurp_sway import slurp_wrapper
 
 def parse_args() -> Args:
-    ap = ArgumentParser()
+    ap = ArgumentParser(
+        description="Wrapper around slurp that adds Sway-specific features such as toplevel selection.",
+        epilog=(
+            "Options marked (extension) are specific to %(prog)s. "
+            "Options marked (wrapped) are reimplemented and not passed to slurp."
+        )
+    )
 
     slurp_wrapper.add_options(ap)
 
     # extensions and wrapped options
-    ap.add_argument("-o", action="store_true", default=False, help="Select a display output") # wrapped
-    ap.add_argument("-t", action="store_true", default=False, help="Select a visible window") # extension, implemented as boxes
-    ap.add_argument("-f", default="%x,%y %wx%h\n", type=str, help="Set output format") # wrapped
-    ap.add_argument("-x", action="store_true", default=False, help="Use xdg-desktop-portal-wlr format") # extension
-    ap.add_argument("-R", action="store_true", default=False, help="Strip label if region is not an exact input region") # extension
+    ap.add_argument("-t", action="store_true", default=False, help="Select a visible window (extension)") # extension, implemented as boxes
+    ap.add_argument("-x", action="store_true", default=False, help="Use xdg-desktop-portal-wlr format (extension)") # extension
+    ap.add_argument("-R", action="store_true", default=False, help="Strip label if region is not an exact input region (extension)") # extension
 
     return ap.parse_args()
 

@@ -10,16 +10,18 @@ ARG_OPTIONS: list[str] = ["b", "c", "s", "B", "F", "w", "a"]
 FLAG_OPTIONS: list[str] = ["d", "p", "r"]
 
 def add_options(ap: ArgumentParser):
-    ap.add_argument("-b", default=None, type=str, help="Set background color (#rrggbbaa)")
-    ap.add_argument("-c", default=None, type=str, help="Set border color (#rrggbbaa)")
-    ap.add_argument("-s", default=None, type=str, help="Set selection color (#rrggbbaa)")
-    ap.add_argument("-B", default=None, type=str, help="Set option box color (#rrggbbaa)")
     ap.add_argument("-d", action="store_true", default=False, help="Display dimensions of selection")
-    ap.add_argument("-F", default=None, type=str, help="Set the font family for the dimensions")
-    ap.add_argument("-w", default=None, type=int, help="Set border weight")
+    ap.add_argument("-b", default=None, type=str, help="Set background color", metavar="#rrggbbaa")
+    ap.add_argument("-c", default=None, type=str, help="Set border color", metavar="#rrggbbaa")
+    ap.add_argument("-s", default=None, type=str, help="Set selection color", metavar="#rrggbbaa")
+    ap.add_argument("-B", default=None, type=str, help="Set option box color", metavar="#rrggbbaa")
+    ap.add_argument("-F", default=None, type=str, help="Set the font family for the dimensions", metavar="s")
+    ap.add_argument("-w", default=None, type=int, help="Set border weight", metavar="n")
+    ap.add_argument("-f", default="%x,%y %wx%h\n", type=str, help="Set output format (wrapped)", metavar="s") # wrapped
+    ap.add_argument("-o", action="store_true", default=False, help="Select a display output (wrapped)") # wrapped
     ap.add_argument("-p", action="store_true", default=False, help="Select a single point")
     ap.add_argument("-r", action="store_true", default=False, help="Restrict selection to predefined boxes")
-    ap.add_argument("-a", default=None, type=str, help="Force aspect ration (w:h)")
+    ap.add_argument("-a", default=None, type=str, help="Force aspect ration", metavar="w:h")
 
 def format_slurp_cmdline(args: Args) -> list[str]:
     cmd: list[str] = ["slurp"]
