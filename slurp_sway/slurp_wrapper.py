@@ -43,7 +43,7 @@ def format_slurp_cmdline(args: Args) -> list[str]:
 XDPW_KIND_MAPPING = {
     "output": "Monitor",
     "toplevel": "Window",
-    "input": "Region",
+    "input": "Input",
     "default": "Region"
 }
 
@@ -87,7 +87,7 @@ class SlurpResult:
                 case (True, "l"):
                     result += self.region_box.label
                 case (True, "k"):
-                    result += self.region_box.kind or ""
+                    result += self.region_box.kind or "region"
                 case (True, "X"):
                     result += f"{self.output_box.x}"
                 case (True, "Y"):
@@ -107,7 +107,7 @@ class SlurpResult:
         return result
 
     def format_xdpw(self) -> str:
-        if map_xdpw_kind(self.region_box.kind) == "Region":
+        if map_xdpw_kind(self.region_box.kind) not in ("Monitor", "Window"):
             raise ValueError("non-monitor/window regions are not supported by xdg-desktop-portal-wlr yet")
         return self.format("%K: %L\n")
 
