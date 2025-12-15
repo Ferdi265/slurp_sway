@@ -8,6 +8,12 @@ Wrapper around slurp that adds Sway-specific features such as toplevel selection
 - Support for selecting visible windows with `-t`
   - Current window positions and toplevel identifiers are read using `swaymsg -t get_tree`
 - Support for `xdg-desktop-portal-wlr 0.8.1` output format with `-x` (`Monitor: ` and `Window: `)
+- Support for additional **FORMAT** sequences:
+  - `%k` region kind (`output` for outputs, `toplevel` for toplevels, `input` for stdin regions, and `region` for freeform regions)
+  - `%K` xdg-desktop-portal-wlr compatible region kind (`Monitor` for outputs, `Window` for toplevels, and as an extension `Ìnput` for stdin regions and `Region` for freeform regions)
+  - `%L` label of the region, but use the region coordinates and size for regions without a label (format `%x,%y %wx%h`)
+- Support for not associating freeform regions with output/toplevel/stdin region labels with `-R`
+  - This is intended to be used with the `%L` format
 
 ## Usage
 
